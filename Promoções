@@ -1,0 +1,86 @@
+def calcular_total(carrinho):
+    """Calcula o total da compra com base nos itens do carrinho."""
+    return sum(item['subtotal'] for item in carrinho)
+
+
+def aplicar_promocoes(carrinho, codigo_promocional=None):
+    """Aplica promoções e calcula o total ajustado."""
+    total = calcular_total(carrinho)
+    desconto = 0
+    brinde = False
+
+    # Promoção: Desconto progressivo
+    if total > 200:
+        desconto = total * 0.2
+        print("\nPromoção: Você ganhou 20% de desconto por compras acima de R$200!")
+    elif total > 100:
+        desconto = total * 0.1
+        print("\nPromoção: Você ganhou 10% de desconto por compras acima de R$100!")
+
+    # Promoção: Brinde para 3 ou mais bolos
+    quantidade_total = sum(item['quantidade'] for item in carrinho)
+    if quantidade_total >= 3:
+        brinde = True
+        print("Promoção: Você ganhou um cupcake de brinde por comprar 3 ou mais bolos!")
+
+    # Promoção sazonal: Código promocional
+    if codigo_promocional == "BOLO10":
+        desconto_adicional = total * 0.1
+        desconto += desconto_adicional
+        print("\nPromoção: Código promocional 'BOLO10' aplicado! Desconto adicional de 10%.")
+
+    total_com_desconto = total - desconto
+    return total_com_desconto, desconto, brinde
+
+
+def finalizar_compra(carrinho):
+    """Exibe o total, aplica promoções e conclui o pedido."""
+    if not carrinho:
+        print("\nSeu carrinho está vazio. Adicione itens antes de finalizar a compra.")
+        return
+
+    exibir_carrinho(carrinho)
+    print("\nSubtotal da compra: R${:.2f}".format(calcular_total(carrinho)))
+
+    # Pergunta sobre código promocional
+    codigo_promocional = input("\nVocê possui um código promocional? (Digite ou pressione Enter para pular): ")
+
+    # Aplica promoções
+    total_com_promocoes, desconto, brinde = aplicar_promocoes(carrinho, codigo_promocional)
+
+    # Exibe total com promoções
+    print(f"\nTotal com promoções aplicadas: R${total_com_promocoes:.2f} (Descontos: R${desconto:.2f})")
+
+    confirmar = input("Deseja prosseguir para o pagamento? (s/n): ").lower()
+    if confirmar == "s":
+        print("\nPagamento realizado com sucesso! Obrigado por comprar conosco.")
+        if brinde:
+            print("Parabéns! Você receberá um cupcake de brinde com seu pedido.")
+        carrinho.clear()
+    else:
+        print("Compra não finalizada. Você pode continuar comprando.")
+
+
+def exibir_carrinho(carrinho):
+    """Exibe os itens no carrinho e o subtotal de cada um."""
+    if not carrinho:
+        print("\nSeu carrinho está vazio.")
+    else:
+        print("\nItens no carrinho:")
+        total = 0
+        for item in carrinho:
+            print(f"{item['quantidade']}x {item['nome']} - R${item['preco']:.2f} cada (Subtotal: R${item['subtotal']:.2f})")
+            total += item["subtotal"]
+        print(f"\nTotal do carrinho: R${total:.2f}")
+
+
+# Exemplo de funcionamento
+if _name_ == "_main_":
+    # Carrinho de exemplo
+    carrinho = [
+        {"nome": "Bolo de Chocolate", "preco": 50.00, "quantidade": 2, "subtotal": 100.00},
+        {"nome": "Bolo de Morango", "preco": 60.00, "quantidade": 1, "subtotal": 60.00},
+    ]
+
+    # Finaliza a compra
+    finalizar_compra(carrinho)
