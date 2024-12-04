@@ -1,0 +1,44 @@
+def exibir_menu():
+    print("\n** Bem-vindo à Loja de Bolos Online **\n")
+    print("Escolha o sabor do bolo:")
+    sabores = {
+        1: "Chocolate",
+        2: "Baunilha",
+        3: "Red Velvet",
+        4: "Cenoura",
+        5: "Prestígio"
+    }
+    for chave, valor in sabores.items():
+        print(f"{chave}. {valor}")
+
+    sabor_escolhido = int(input("\nDigite o número do sabor desejado: "))
+    if sabor_escolhido not in sabores:
+        print("Opção inválida! Por favor, escolha novamente.")
+        return exibir_menu()
+
+    print("\nEscolha o tamanho do bolo:")
+    tamanhos = {
+        1: ("Pequeno (serve 4 pessoas)", 30.0),
+        2: ("Médio (serve 8 pessoas)", 50.0),
+        3: ("Grande (serve 12 pessoas)", 70.0)
+    }
+    for chave, (descricao, preco) in tamanhos.items():
+        print(f"{chave}. {descricao} - R$ {preco:.2f}")
+
+    tamanho_escolhido = int(input("\nDigite o número do tamanho desejado: "))
+    if tamanho_escolhido not in tamanhos:
+        print("Opção inválida! Por favor, escolha novamente.")
+        return exibir_menu()
+
+    sabor = sabores[sabor_escolhido]
+    tamanho, preco = tamanhos[tamanho_escolhido]
+
+    print("\n** Resumo do Pedido **")
+    print(f"Sabor: {sabor}")
+    print(f"Tamanho: {tamanho}")
+    print(f"Preço: R$ {preco:.2f}")
+    print("\nObrigado por comprar conosco!")
+
+# Executa o menu
+exibir_menu()
+
